@@ -1,0 +1,26 @@
+{% extends 'about/base.html' %}
+{% load static %}
+
+
+{% block stylesheet %}
+  <link rel="stylesheet" type="text/css" href="{% static 'geireann/css/geireann.css' %}"/>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'geireann/js/geireann.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+  <div id="page_container">
+    <div id="game_container">
+      <img id="gman" src="{% static 'geireann/images/gman.png' %}"><br>
+      G-Man Gonna<br>
+      Make P-Man
+    </div>
+  </div>
+
+
+
+{% endblock %}

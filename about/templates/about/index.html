@@ -1,0 +1,23 @@
+{% extends 'about/base.html' %}
+{% load static %}
+
+
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="{% static 'about/css/index.css' %}"/>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+
+
+{% block content %}
+
+	<div id="page_container">
+		<div id="game_container">
+			<img id="guinness500" src="{% static 'about/images/guinness500.png' %}"><br>
+			Woof!
+		</div>
+	</div>
+
+{% endblock %}

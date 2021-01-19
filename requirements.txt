@@ -1,0 +1,17 @@
+asgiref
+certifi
+chardet
+dj-database-url
+Django
+django-heroku
+django-hosts
+gunicorn
+heroku
+idna
+psycopg2
+python-dateutil
+pytz
+requests
+sqlparse
+urllib3
+whitenoise
