@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret
 SECRET_KEY = os.environ.get('LINDFIELDROBERTS_SECRET_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production
+# Note: If this is set to false then static files don't auto update during dev
 DEBUG = False
 # SECURITY WARNING: Should be set to true in production
 CSRF_COOKIE_SECURE = True

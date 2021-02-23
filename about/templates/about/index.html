@@ -7,17 +7,483 @@
 {% endblock %}
 
 {% block javascript %}
-{% endblock %}
 
+	<!-- Square and extended classes -->
+	<script src="{% static 'about/js/square.js' %}"></script>
+	<script src="{% static 'about/js/dot.js' %}"></script>
+	<script src="{% static 'about/js/energizer.js' %}"></script>
+	<script src="{% static 'about/js/wall.js' %}"></script>
+	<script src="{% static 'about/js/empty.js' %}"></script>
+
+	<!-- Animal and extended classes -->
+	<script src="{% static 'about/js/animal.js' %}"></script>
+	<script src="{% static 'about/js/pet.js' %}"></script>
+	<script src="{% static 'about/js/person.js' %}"></script>
+
+	<!-- Logical board -->
+	<script src="{% static 'about/js/board.js' %}"></script>
+
+	<!-- Main game driver -->
+	<script src="{% static 'about/js/index.js' %}"></script>
+
+	<!-- Helper classes -->
+	<script src="{% static 'about/js/html.js' %}"></script>
+ 	<script src="{% static 'about/js/audio.js' %}"></script>
+{% endblock %}
 
 
 {% block content %}
 
-	<div id="page_container">
-		<div id="game_container">
+	<!-- Loading overlay -->
+	<div class="page_container" id="loading_container">
+		<div class="content_container">
 			<img id="guinness500" src="{% static 'about/images/guinness500.png' %}"><br>
-			Woof!
+			<div id="loading">Woof</div>
+			<!-- randomly also place in "We laav you" -->
+			<!-- randomly also place in "Feel free" -->
 		</div>
 	</div>
+
+	<!-- Game -->
+	<div class="page_container" id="game_container">
+
+
+		<div class="content_container" id="board_container">
+			<!-- Game window -->
+			<div class="row">
+				<!-- Row 1 starting from the top -->				
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 2 -->				
+				<div class="square wall"></div>
+				<div class="square energizer"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square energizer"></div>
+				<div class="square wall"></div>
+				<div class="square wall">
+					<img id="mummy_daddy_img" src="{% static 'about/images/mummy_daddy_cropped.png' %}">
+				</div>
+				<div class="square wall"></div>				
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 3 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>				
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 4 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot">
+					<div id="end_of_game_overlay">
+						<div id="outcome">
+							<div id="outcome_txt">K.O. by Quentin[]</div>
+							<div id="outcome_img"></div>
+						</div>
+						<div id="end_of_game_message">
+							<div id="end_of_game_txt"></div>
+							<div id="end_of_game_img"></div>
+						</div>
+						<div id="leader_board_form">
+							<form action="/" method="post">
+								{% csrf_token %}
+								<input type="number" name="score" id="score_input" hidden required>
+								<div id="form_txt"><input type="text" name="userName" id="user_name_input" placeholder="game name?" minlength="1" maxlength="10" required><input id="enter_button" class="proceed_button" value=" " type="submit"></div>
+							</form>
+						</div>
+						<!-- If the form isn't displayed show a refresh button to restart game -->
+						<div id="page_refresh_container" class="refresh_container">
+							<div></div><button id="refresh_button" class="proceed_button" onClick="window.location.reload();"> </button>
+						</div>
+					</div>
+				</div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square energizer"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square empty"></div>				
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 5 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>				
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 6 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square empty"></div>
+				<div class="square empty"></div>				
+				<div class="square empty"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 7 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>				
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 8 Center Line -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>				
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 9 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 10 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square energizer"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square energizer"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 11 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 12 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square energizer"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 13 -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square wall letter"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 14  -->				
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square wall"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square dot"></div>
+				<div class="square energizer"></div>
+				<div class="square wall"></div>
+			</div>
+			<div class="row">
+				<!-- Row 15 last -->				
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+				<div class="square wall"></div>
+			</div>
+
+		</div>
+
+		<div class="content_container" id="leader_board_and_stats">
+			<div id="leader_board">
+				{% if highScores %}
+				    {% for highScore in highScores %}
+				    	<span class="leader_board_entry">
+					    	<!-- Format the score entry, on one line so that format is not effected -->
+						    <pre><span class="ordinal">{{ forloop.counter|rjust:"2" }}.</span><span class="leader_board_user_name">{{ highScore.userName|ljust:"11" }}</span><span class="leader_board_score">{{ highScore.score|rjust:"3" }}</span></pre><br>
+						</span>
+				    {% endfor %}
+				{% else %}
+				    <span>No scores available.</span>
+				{% endif %}
+			</div>
+
+			<!-- Audio and game stats -->
+			<div id="game_stats">
+				<!-- Audio symbol -->
+				<div class="stat" id="audio">
+					<div id="mute_unmute" class="unmuted"></div>
+				</div>
+				<!-- Show Visuals symbol -->
+				<div class="stat" id="visual">
+					<div id="see_unsee" class="see"></div>
+				</div>
+				<!-- Current Score -->
+				<div class="stat" id="score">
+					0
+				</div>
+				
+				<audio id="theme_player" loop> 
+					<source src="{% static 'about/audio/moose_compressed.mp3' %}">   
+				</audio>
+				<audio id="panic_player" loop>
+					<source src="{% static 'about/audio/dance_compressed.mp3' %}">
+				</audio>
+				<audio id="victory_player">
+					<source src="{% static 'about/audio/soul_compressed.mp3' %}">
+				</audio>
+				<audio id="ko_player">
+					<source src="{% static 'about/audio/dawn_compressed.mp3' %}">
+				</audio>
+				
+			</div>
+
+		</div>
+
+	</div>
+
 
 {% endblock %}

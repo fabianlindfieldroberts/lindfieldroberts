@@ -1,0 +1,20 @@
+<svg
+    version="1.1"
+    id="dot"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    x="0"
+    y="0"
+    height="100%"
+    width="100%"
+    viewBox="0 0 100 100"
+    preserveAspectRatio="none">
+	<g>
+		<title>background</title>
+		<rect fill="#000" height="100" width="100" y="0" x="0"/>
+	</g>
+	<g>
+		<title>dot</title>
+		<ellipse ry="8" rx="8" cy="50" cx="50" fill-opacity="null" fill="#fff"/>
+	</g>
+</svg>

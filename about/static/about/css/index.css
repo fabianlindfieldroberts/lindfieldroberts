@@ -2,20 +2,441 @@
 /* Index                                             */
 /*****************************************************/
 
-#page_container {
+.page_container {
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	flex-wrap: wrap;
+	align-items: top; /* Location of items vertically */
+	align-content: center; /* Space between items */
+	justify-content: center; /* Location of items horizontally */
 	width: 100vw;
 	height: 100vh;
-	font-size: 50px;
 	font-weight: 900;
 }
-
 #game_container {
+	/* Initially not displayed until page loaded */
+	display: none;
+	/*background-color: green;*/
+}
+
+.content_container {
 	text-align: center;
+	font-family: "Lucida Console", "Courier New", monospace;
+	margin: 0;
+	padding: 0;
+}
+
+/**************************** LOADING SCREEN *******************************/
+/***************************************************************************/
+#loading_container {
+	top: 0;
+	left: 0;
+	position: fixed;
+	font-size: 4vw;
+	opacity: 0.9;
+	background-color: #fff;
+	z-index: 99;
+}
+
+#loading {
+	width: 6em;
+	margin-left: 3em;
+	text-align: left;
+}
+
+#loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
+  animation: ellipsis steps(4,end) 900ms infinite;
+  content: "!!!";
+  width: 0;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 4em;    
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 4em;    
+  }
 }
 
 #guinness500 {
-	height: 200px;
+	height: 15vw;
 }
+
+
+
+/*********************************** GAME **********************************/
+/***************************************************************************/
+#board_container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	/* Shift board to the right slightly so that it is more centered */
+	padding-left: 5vw;
+	/*background-color: orange;*/
+	width: 63vw;
+
+}
+
+.row {
+	display: flex;
+	background-color: black;
+}
+
+.square {
+	height: 2.7vw;
+	width: 2.7vw;
+	background-color: black;
+	/*border: 0.01vw #cfcfcf black;*/
+}
+
+.wall {
+	background-color: white;
+	/*border: 0.01vw #cfcfcf solid;*/
+
+}
+
+.dot {
+	background: url("/static/about/images/dot.svg");
+	background-repeat: no-repeat;
+}
+
+.energizer {
+	background: url("/static/about/images/energizer.svg");
+	background-repeat: no-repeat;
+}
+
+.empty {
+}
+
+.quentin {
+	background: url("/static/about/images/quentin_head200.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	z-index: 10;
+}
+
+.fabian {
+	background: url("/static/about/images/fabian_head200.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	z-index: 10;
+}
+
+.geireann {
+	background: url("/static/about/images/geireann_head200.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	z-index: 10;
+}
+
+.guinness {
+	background: url("/static/about/images/guinness_head200.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+
+.panic1 {
+	background-color: #a569ff;
+}
+.panic2 {
+	background-color: #00db9a;
+}
+
+
+#mummy_daddy_img {
+	position: relative;
+	top: 0;
+	left: 0;
+	overflow: visible;
+	width: 8.1vw; /* Twice width of square */
+	z-index: 5;
+}
+
+
+/****************************** LEADER BOARD *******************************/
+/***************************************************************************/
+
+#leader_board_and_stats {
+	width: 15vw;
+	text-align: left;
+	margin-left: -2vw;
+	margin-top: 2.7vw;
+}
+
+#leader_board {
+	height: 31vw;
+	z-index: 20;
+	line-height: 0vw;
+	/*background-color: green;*/
+}
+
+.leader_board_entry span {
+	/*background-color: orange;*/
+	margin: 0;
+	padding: 0;
+}
+.ordinal {
+	font-size: 1vw;
+}
+pre {
+    font-family: "Lucida Console", "Courier New", monospace;
+    padding: 0;
+    margin: 0;
+    line-height: 1.95vw;
+    font-size: 1.5vw;
+    color: black;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+}
+.leader_board_user_name {
+	margin: 0;
+	padding: 0;
+}
+.leader_board_score {
+	margin: 0;
+	padding: 0;
+}
+
+
+/****************************** AUDIO & SCORE ******************************/
+/***************************************************************************/
+
+#game_stats {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	/*background-color: blue;*/
+	color: black;
+	font-weight: 500;
+	font-size: 4vw;
+	line-height: 3vw;
+	margin-top: 1vw;
+}
+
+.stat {
+	display: flex-box;
+}
+
+#score {
+	padding-top: 0.25vw;
+	width: 6vw;
+	text-align: right;
+}
+
+#visual {
+	/*background-color: green;*/
+}
+#see_unsee {
+    width: 2.7vw;
+    height: 2.7vw;
+}
+#see_unsee.see {
+	background: url("/static/about/images/see.svg");
+	background-repeat: no-repeat;
+}
+#see_unsee.unsee {
+	background: url("/static/about/images/unsee.svg");
+	background-repeat: no-repeat;
+}
+
+
+#audio {
+	/*background-color: green;*/
+}
+#mute_unmute { 
+    width: 2.7vw;
+    height: 2.7vw;
+}
+#mute_unmute.muted {
+	background: url("/static/about/images/muted.svg");
+	background-repeat: no-repeat;
+}
+#mute_unmute.unmuted {
+	background: url("/static/about/images/unmuted.svg");
+	background-repeat: no-repeat;
+}
+
+
+/*************************** LEADER BOARD FORM *****************************/
+/***************************************************************************/
+#end_of_game_overlay {
+	display: none; /* Changed to flex by js */
+	align-items: center; /* Location of items vertically */
+	align-content: space-between; /* Space between items */
+	justify-content: center; /* Location of items horizontally */
+	flex-wrap: wrap;
+	position: relative;
+	top: 0.7vw;
+	left: 0.7vw;
+	height: 22.9vw;
+	width: 28.3vw;
+	font-size: 3vw;
+	line-height: 2.5vw;
+	overflow: visible;
+	z-index: 20;
+	background-color: white;
+	border: 0.5vw solid;
+	border-image: linear-gradient(to right, #a569ff 25%, #00db9a 75%) 5;
+
+}
+
+#outcome {
+	display: flex;
+	align-items: center; /* Location of items vertically */
+	align-content: center; /* Space between items */
+	justify-content: center; /* Location of items horizontally */
+	font-size: 2.1vw;
+	padding-top: 1vw;
+}
+#outcome_txt {
+	display: inline-block;
+	/*background-color: green;*/
+}
+#outcome_img {
+	display: inline-block;
+	width: 2.7vw;
+	height: 2.7vw;
+	z-index: 30;
+	/*background-color: blue;*/
+}
+
+#end_of_game_message {
+	display: flex;
+	align-items: top; /* Location of items vertically */
+	align-content: center; /* Space between items */
+	justify-content: center; /* Location of items horizontally */
+	font-size: 1.8vw;
+	line-height: 1.18vw;
+}
+#end_of_game_message.malyon {
+	margin-top: 2vw;
+}
+#end_of_game_message.yiey {
+	flex-direction: row-reverse;
+}
+#end_of_game_message.daddy {
+	flex-direction: row-reverse;
+}
+#end_of_game_img {
+	display: inline-block;
+	width: 10vw;
+	height: 10vw;
+}
+#end_of_game_message.malyon #end_of_game_img {
+	background: url("/static/about/images/malyon_head500.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	margin-top: 2vw;
+	margin-left: -3vw;
+}
+#end_of_game_message.yiey #end_of_game_img{
+	background: url("/static/about/images/yiey_head500.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	margin-right: -2.9vw;
+}
+#end_of_game_message.mummy #end_of_game_img {
+	background: url("/static/about/images/mummy_head500.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	margin-top: 2.6vw;
+	margin-left: -2.9vw;
+}
+#end_of_game_message.daddy #end_of_game_img {
+	background: url("/static/about/images/daddy_head500.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	margin-right: -3vw;
+}
+#end_of_game_txt {
+	display: inline-block;
+	background-size: 100% 100%;
+	font-size: 1.3vw;
+}
+#end_of_game_message.malyon #end_of_game_txt {
+	background: url("/static/about/images/speach_bubble_malyon.svg"); 
+	background-repeat: no-repeat;
+	height: 12.5vw;
+	width: 12.5vw;
+	padding-right: 2.8vw;
+	padding-top: 0.8vw;
+}
+#end_of_game_message.yiey #end_of_game_txt {
+	background: url("/static/about/images/speach_bubble_yiey.svg"); 
+	background-repeat: no-repeat;
+	height: 10.5vw;
+	width: 12.5vw;
+	padding-left: 2.8vw;
+	padding-top: 2.4vw;
+}
+#end_of_game_message.mummy #end_of_game_txt {
+	background: url("/static/about/images/thought_bubble_mummy.svg"); 
+	background-repeat: no-repeat;
+	height: 9vw;
+	width: 14.5vw;
+	padding-right: 4vw;
+	padding-top: 1.8vw;
+}
+#end_of_game_message.daddy #end_of_game_txt {
+	background: url("/static/about/images/speach_bubble_daddy.svg"); 
+	background-repeat: no-repeat;
+	height: 10.5vw;
+	width: 12.5vw;
+	padding-left: 2.9vw;
+	padding-top: 1.5vw;
+}
+#leader_board_form {
+	display: none;  /* Changed by js */ 
+	font-size: 1.8vw;
+	line-height: 1.8vw;
+	padding-bottom: 1.5vw;
+}
+#user_name_input {
+	width: 11.2vw;
+	border-radius: 0;
+	border: none;
+	border-bottom: 0.2vw dashed black;
+	margin-left: 0.3vw;
+}
+#page_refresh_container {
+	display: inline-block;
+	text-align: right;
+	width: 26vw;
+}
+
+.proceed_button {
+	display: inline-block;
+	border-radius: 2vw; 
+	border: none;
+	width: 2vw;
+	height: 2vw;
+	margin-left: 0.3vw;
+}
+#enter_button {
+	background: url("/static/about/images/enter.svg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 70% 70%;
+}
+#refresh_button {
+	background: url("/static/about/images/refresh.svg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 70% 70%;
+}
+#enter_button:hover, #refresh_button:hover {
+	background-color: #e6e6e6;
+}
+
