@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: keep the secret key used in production secret
-SECRET_KEY = os.environ.get('LINDFIELDROBERTS_SECRET_KEY', '')
+SECRET_KEY = os.environ.get('LINDFIELDROBERTS_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production
 # Note: If this is set to false then static files don't auto update during dev
 DEBUG = False
@@ -110,11 +110,14 @@ WSGI_APPLICATION = 'lindfieldroberts.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('LINDFIELDROBERTS_DATABASE_NAME'),
+        'USER': os.environ.get('LINDFIELDROBERTS_DATABASE_USER'),
+        'PASSWORD': os.environ.get('LINDFIELDROBERTS_DATABASE_PASSWORD'),
+        'HOST': os.environ.get('LINDFIELDROBERTS_DATABASE_HOST'),
+        'PORT': os.environ.get('LINDFIELDROBERTS_DATABASE_PORT')
     }
 }
 
