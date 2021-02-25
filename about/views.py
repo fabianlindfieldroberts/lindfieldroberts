@@ -48,6 +48,8 @@ def index(request):
 			if (len(lowestHighScore) == 1):
 				lowestHighScore.delete()
 
+			# createPlaceholderScores()
+
 		
 		return HttpResponseRedirect('/')
 
@@ -69,7 +71,7 @@ def createPlaceholderScores():
 	deleteAllScores()
 	for i in list(range(0,15)):
 		highScore = HighScore(
-			userName = "..........",
-			score = i * 8
+			userName = "HBD!Daddy!",
+			score = 60
 		)
 		highScore.save()

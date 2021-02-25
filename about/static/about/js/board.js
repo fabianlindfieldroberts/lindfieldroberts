@@ -194,19 +194,22 @@ class Board {
 		if (this.gameOver && madeItToLeaderBoard) {
 			// Made it top three
 			if (position <= 3) {
-				message += "Oma,&nbsp;&nbsp;<br>&nbsp;oma,&nbsp;<br><em>&nbsp;&nbsp;Yiey!</em>";
+				message += "Close!<br>You win<br>when you<br>are twice<br>sixty+6!";
+				// message += "Oma,&nbsp;&nbsp;<br>&nbsp;oma,&nbsp;<br><em>&nbsp;&nbsp;Yiey!</em>";
 				messenger = "yiey";
 			}
 			// Didn't make it to first place
 			else {
-				message += "<em>Horror&nbsp;&nbsp;&nbsp;<br>&nbsp;vacui!</em><br>The leader<br>board is<br>&nbsp;busy!";
+				message += "<em>First<br>&nbsp;&nbsp;class!</em><br>Those<br>&nbsp;&nbsp;legs!";
+				// message += "<em>Horror&nbsp;&nbsp;&nbsp;<br>&nbsp;vacui!</em><br>The leader<br>board is<br>&nbsp;busy!";
 				messenger = "mummy";
 			}
 			
 		}
 		// Lost game and didn't make it to the leader board
 		else if (this.gameOver && !madeItToLeaderBoard) {
-			message = message + "If at<br>first you<br>don't succeed,<br>try, try again!";
+			message = message + "60 years<br>wise! No win, no <br>matter!";
+			// message = message + "If at<br>first you<br>don't succeed,<br>try, try again!";
 			messenger = "malyon";
 		}
 		// Game won

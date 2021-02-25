@@ -371,7 +371,7 @@ pre {
 	height: 12.5vw;
 	width: 12.5vw;
 	padding-right: 2.8vw;
-	padding-top: 0.8vw;
+	padding-top: 1.7vw;
 }
 #end_of_game_message.yiey #end_of_game_txt {
 	background: url("/static/about/images/speach_bubble_yiey.svg"); 
@@ -379,7 +379,7 @@ pre {
 	height: 10.5vw;
 	width: 12.5vw;
 	padding-left: 2.8vw;
-	padding-top: 2.4vw;
+	padding-top: 1.1vw;
 }
 #end_of_game_message.mummy #end_of_game_txt {
 	background: url("/static/about/images/thought_bubble_mummy.svg"); 
@@ -387,7 +387,7 @@ pre {
 	height: 9vw;
 	width: 14.5vw;
 	padding-right: 4vw;
-	padding-top: 1.8vw;
+	padding-top: 2vw;
 }
 #end_of_game_message.daddy #end_of_game_txt {
 	background: url("/static/about/images/speach_bubble_daddy.svg"); 
