@@ -166,7 +166,7 @@
 /***************************************************************************/
 
 #leader_board_and_stats {
-	width: 16vw;
+	width: 17vw;
 	text-align: right;
 	margin-left: -2vw;
 	margin-top: 2.7vw;
@@ -216,7 +216,7 @@ pre {
 #game_stats {
 	display: flex;
 	justify-content: space-between;
-	width: 16vw;
+	width: 17vw;
 	color: black;
 	font-weight: 500;
 	font-size: 4vw;
@@ -254,7 +254,7 @@ pre {
 
 
 #audio {
-	/*background-color: green;*/
+	margin-left: 1vw;
 }
 #mute_unmute { 
     width: 2.7vw;
@@ -270,7 +270,7 @@ pre {
 }
 
 
-/*************************** LEADER BOARD FORM *****************************/
+/*************************** END OF GAME FORM ******************************/
 /***************************************************************************/
 #end_of_game_overlay {
 	display: none; /* Changed to flex by js */
