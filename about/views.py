@@ -17,6 +17,9 @@ from .constants import LEADER_BOARD_LENGTH
 from .models import HighScore
 from .forms import HighScoreForm
 
+# Debug
+from sys import stderr
+
 #################################################################
 # LANDING PAGE													#
 #################################################################
@@ -48,8 +51,6 @@ def index(request):
 			if (len(lowestHighScore) == 1):
 				lowestHighScore.delete()
 
-			# createPlaceholderScores()
-
 		
 		return HttpResponseRedirect('/')
 
@@ -61,7 +62,6 @@ def deleteAllScores():
 
 # Helper function to print all scores in database to the console
 def printAllScores():
-	from sys import stderr
 	allScores = HighScore.objects.order_by('-score', 'dateCreated')
 	for score in allScores:
 		print(score, stderr)

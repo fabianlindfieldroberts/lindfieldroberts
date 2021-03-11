@@ -78,9 +78,9 @@
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-	/* Shift board to the right slightly so that it is more centered */
+	/* Shift board to the left slightly so that it is more centered */
 	padding-left: 5vw;
-	/*background-color: orange;*/
+	margin-left: -5vw;
 	width: 63vw;
 
 }
@@ -166,8 +166,8 @@
 /***************************************************************************/
 
 #leader_board_and_stats {
-	width: 15vw;
-	text-align: left;
+	width: 16vw;
+	text-align: right;
 	margin-left: -2vw;
 	margin-top: 2.7vw;
 }
@@ -216,8 +216,7 @@ pre {
 #game_stats {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
-	/*background-color: blue;*/
+	width: 16vw;
 	color: black;
 	font-weight: 500;
 	font-size: 4vw;
@@ -230,8 +229,10 @@ pre {
 }
 
 #score {
-	padding-top: 0.25vw;
-	width: 6vw;
+	padding-top: 0.1vw;
+	padding-right: 0;
+	margin-right: -0.3vw;
+	width: 8vw;
 	text-align: right;
 }
 

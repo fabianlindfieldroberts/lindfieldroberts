@@ -443,7 +443,7 @@
 				    {% for highScore in highScores %}
 				    	<span class="leader_board_entry">
 					    	<!-- Format the score entry, on one line so that format is not effected -->
-						    <pre><span class="ordinal">{{ forloop.counter|rjust:"2" }}.</span><span class="leader_board_user_name">{{ highScore.userName|ljust:"11" }}</span><span class="leader_board_score">{{ highScore.score|rjust:"3" }}</span></pre><br>
+						    <pre><span class="ordinal">{{ forloop.counter|rjust:"2" }}. </span><span class="leader_board_user_name">{{ highScore.userName|ljust:"11" }}</span><span class="leader_board_score">{{ highScore.score|rjust:"3" }}</span></pre><br>
 						</span>
 				    {% endfor %}
 				{% else %}
