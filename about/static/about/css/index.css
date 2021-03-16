@@ -286,7 +286,7 @@ pre {
 	font-size: 3vw;
 	line-height: 2.5vw;
 	overflow: visible;
-	z-index: 20;
+	z-index: 50;
 	background-color: white;
 	border: 0.5vw solid;
 	border-image: linear-gradient(to right, #a569ff 25%, #00db9a 75%) 5;
@@ -300,16 +300,18 @@ pre {
 	justify-content: center; /* Location of items horizontally */
 	font-size: 2.1vw;
 	padding-top: 1vw;
+	z-index: 60;
 }
 #outcome_txt {
 	display: inline-block;
+	z-index: 70;
 	/*background-color: green;*/
 }
 #outcome_img {
 	display: inline-block;
 	width: 2.7vw;
 	height: 2.7vw;
-	z-index: 30;
+	z-index: 70;
 	/*background-color: blue;*/
 }
 
@@ -372,7 +374,7 @@ pre {
 	height: 12.5vw;
 	width: 12.5vw;
 	padding-right: 2.8vw;
-	padding-top: 1.7vw;
+	padding-top: 0.9vw;
 }
 #end_of_game_message.yiey #end_of_game_txt {
 	background: url("/static/about/images/speach_bubble_yiey.svg"); 
@@ -380,15 +382,15 @@ pre {
 	height: 10.5vw;
 	width: 12.5vw;
 	padding-left: 2.8vw;
-	padding-top: 1.1vw;
+	padding-top: 2.3vw;
 }
 #end_of_game_message.mummy #end_of_game_txt {
 	background: url("/static/about/images/thought_bubble_mummy.svg"); 
 	background-repeat: no-repeat;
 	height: 9vw;
 	width: 14.5vw;
-	padding-right: 4vw;
-	padding-top: 2vw;
+	padding-right: 3.9vw;
+	padding-top: 1.7vw;
 }
 #end_of_game_message.daddy #end_of_game_txt {
 	background: url("/static/about/images/speach_bubble_daddy.svg"); 
