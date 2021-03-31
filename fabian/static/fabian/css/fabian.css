@@ -70,6 +70,10 @@ body {
 }
 
 h2 {
+	display: flex;
+	align-items: center; /* Location of items vertically */
+	align-content: left; /* Space between items */
+	justify-content: left; /* Location of items horizontally */
 	margin: 0vmin;
 	padding: 0vmin;
 	
@@ -126,29 +130,64 @@ li {
 	font-size: 4.2vmin;
 	line-height: 3.2vmin;
 }
+#about h2 .return_svg {
+	height: 3.2vmin;
+}
+
 #career h2 {
 	font-size: 3.6vmin;
 	line-height: 3.2vmin;
 }
+#career h2 .return_svg {
+	height: 3.2vmin;
+}
+
 #academic h2 {
-	font-size: 2.62vmin;
-	line-height: 2.2vmin;
+	font-size: 2.6vmin;
+	line-height: 2.5vmin;
 }
-#personal h2 {
-	font-size: 2.63vmin;
-	line-height: 2.3vmin;
+#academic h2 .return_svg {
+	height: 2.5vmin;
 }
+
+#projects h2 {
+	font-size: 2.7vmin;
+	line-height: 2.5vmin;
+}
+#projects h2 .return_svg {
+	height: 2.5vmin;
+}
+
 #creative h2 {
-	font-size: 2.81vmin;
+	font-size: 2.8vmin;
 	line-height: 2.6vmin;
 }
+#creative h2 .return_svg {
+	height: 2.6vmin;
+}
+
 #resume h2 {
-	font-size: 3.45vmin;
+	font-size: 3.5vmin;
 	line-height: 2.8vmin;
 }
+#resume h2 .return_svg {
+	height: 2.8vmin;
+}
+
 #contact h2 {
-	font-size: 2.95vmin;
-	line-height: 2.8vmin;
+	font-size: 3.0vmin;
+	line-height: 2.9vmin;
+}
+#contact h2 .return_svg {
+	height: 2.9vmin;
+}
+
+
+
+.return_svg {
+	display: none;
+	height: 2.2vmin;
+	cursor: pointer;
 }
 
 .stack_label {
@@ -157,8 +196,15 @@ li {
 	font-size: 2vmin;
 }
 
+#stack_label_text {
+	cursor: pointer;
+}
+#stack_label_text:hover {
+	border-bottom: dotted 1px #bfbfbf;
+}
+
 /********************************* FREE ITEM CSS *********************************/
 /*********************************************************************************/
 .free_item {
-	cursor: pointer;
+	/*cursor: pointer;*/
 }

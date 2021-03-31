@@ -9,11 +9,11 @@ $( document ).ready(function() {
 		stack.push(this);
 	});
 
-	// respond to a click on the stack itself
-	$( 'body' ).on('click', '#stack', function() {
+	// pop an element from the stack
+	function popStackElement(stackDOM) {
 
 		// ensure that there are elements in stack
-		if ( $( this ).children().length <= 0 ) {
+		if ( $( stackDOM ).children().length <= 0 ) {
 			return false;
 		}
 
@@ -68,36 +68,52 @@ $( document ).ready(function() {
 					top:  yLoc + 'vmin',
 					left: xLoc + 'vmin',
 				}, 500, function() {
-					$( element ).find( 'ul' ).show(500);
+					$( element ).find( 'ul, .return_svg' ).show(500);
 				}); 
 			});
 			break;
 		}
+		// If function ends without error return true
+		return true;
+	}
+
+	// respond to a click on the stack itself
+	$( 'body' ).on('click', '#stack', function() {
+		popStackElement(this);
 	});
 
+	// respond to a click on the "Pop the Stack" text
+	$( 'body' ).on('click', '#stack_label_text', function() {
+		popStackElement( $('#stack') );
+	});
 
-	// respond to a click on a free item
-	$( '#center_container' ).on('click', '.free_item', function() {
+	// respond to a click on a free item return button
+	$( 'body' ).on('click', '.return_svg', function() {
+
+		// get the cointaining free item element
+		var free_item = $( this ).closest( '.free_item' )
+
 		// disable animated item click from doing anything
-		if ( $( this ).is(':animated') ) {
+		if ( $( free_item ).is(':animated') ) {
 		    return false;
 		}
 		// return element to stack
-		var free_element = this;
-		$( this ).find( 'ul').hide(500, function(){
-			delete free_item_locations[ $( free_element )[0].id ];
-			stack.push( $( free_element )[0] );
+		$.when(
+			$( free_item ).find( 'ul').hide(500).promise(),
+			$( this ).hide(500).promise()
+		).done(function() {
+			delete free_item_locations[ $( free_item )[0].id ];
+			stack.push( $( free_item )[0] );
 			// reset css
-			$( free_element ).prependTo('#stack');
-			$( free_element ).css({
+			$( free_item ).prependTo( '#stack' );
+			$( free_item ).css({
 				position: '',
 				top: '',
 				left: '',
 			});
-			$( free_element ).attr({ class: 'stack_item' });
+			$( free_item ).attr({ class: 'stack_item' });
 		});
 	});
-
 });
 
 function pixel2Vmin(pixel) {

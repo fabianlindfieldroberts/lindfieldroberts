@@ -23,5 +23,6 @@ from django.conf.urls import include, url
 
 urlpatterns = [
     url(r'^', include('about.urls')),
+    url(r'^', include('fabian.urls')),
     url(r'^admin/', admin.site.urls)
 ]

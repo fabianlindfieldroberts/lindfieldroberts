@@ -75,3 +75,18 @@ def createPlaceholderScores():
 			score = 60
 		)
 		highScore.save()
+
+
+#################################################################
+# CHANGSHU SPRINT												#
+#################################################################
+def kunchenghu(request):
+	# Display the changshu sprint blog
+	if request.method == 'GET':
+		template = loader.get_template('about/kunchenghu.html')
+		# Sort first by score descending and then by date created descending
+		context = {
+		}
+		return HttpResponse(template.render(context, request))
+
+

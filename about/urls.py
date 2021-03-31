@@ -9,7 +9,8 @@ from . import views
 
 urlpatterns = [
 	# Redirect to the home page
-    path('', views.index, name='index')
+    path('', views.index, name='index'),
+    path('kunchenghu/', views.kunchenghu, name='kunchenghu')
 ]
 
 

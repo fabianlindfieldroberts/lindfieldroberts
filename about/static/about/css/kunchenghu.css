@@ -1,0 +1,28 @@
+/*****************************************************/
+/* Sprint                                             */
+/*****************************************************/
+
+.page_container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: top; /* Location of items vertically */
+	align-content: center; /* Space between items */
+	justify-content: center; /* Location of items horizontally */
+	width: 100vw;
+	height: 100vh;
+	font-weight: 900;
+}
+
+.content_container {
+	text-align: center;
+	font-family: "Lucida Console", "Courier New", monospace;
+	width: 60vw;
+	margin: 0;
+	padding: 0;
+}
+
+/*.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}*/
