@@ -10,22 +10,37 @@
 
 {% block javascript %}
 
-	<!-- <script src="https://d3js.org/d3.v6.min.js"></script> -->
+	<script src="https://d3js.org/d3.v6.min.js"></script>
 	<!-- Access to static files from JS -->
-	<!-- <script>  -->
-		<!-- var dataCSV = "{% static 'about/csv/week1.csv' %}"; -->
-	<!-- </script> -->
+	<script> 
+		var graphDataCSV = "{% static 'about/csv/graphWeek1.csv' %}";
+		var statsDataCSV = "{% static 'about/csv/statsWeek1.csv' %}";
+	</script>
 	<!-- Build chart using D3.js -->
-	<!-- <script src="{% static 'about/js/kunchenghu.js' %}"></script> -->
+	<script src="{% static 'about/js/kunchenghu.js' %}"></script>
 
 {% endblock %}
 
 
 {% block content %}
 	<div class="page_container">
+		
 		<div class="content_container">
-			<div>The game is as follows. All times are Changshu time. Starting at 11:23 PM on the 30th March 2021, Daddy and Faboo must begin accruing meters. They have until 11:59 PM on the 23rd May 2021 to achieve the goal of 1,100,000 meters. Daddy can achieve these meters through walking, running, kayaking, and biking. Faboo can achieve these meters through walking, running and erging. Official meters are recorded through Strava. If they achieve these goals they will receive a total of 250 ultra runner bucks from Mummy. In addition, whoever has the most miles at the end will receive 250 ultra runner bucks from the other. The underlying motive for the game is to aid in the successful completion of the Kuncheng Hu Challenge. Game on!</div>
-			<!-- <div id="graph_container"></div> -->
+			<div id="tabs">
+				<button type="button" id="graphs_button">Graphs</button>
+				<button type="button" id="stats_button">Stats</button>
+				<button type="button" id="rules_button">Rules</button>
+			</div>
+			<div id="graph_container">
+				<div id="graph"></div>
+				<div id="buttons">
+					<button type="button" id="cumulative_button">Cumulative</button>
+					<button type="button" id="non_cumulative_button">Non Cumulative</button>
+				</div>
+			</div>
+			<div id="stats_container">
+			</div>
+			<div id="rules_container">The game is as follows. All times are Changshu time. Starting at 11:23 PM on the 30th March 2021, Daddy and Faboo must begin accruing meters. They have until 11:59 PM on the 23rd May 2021 to achieve the goal of 1,100,000 meters. Daddy can achieve these meters through walking, running, kayaking, and biking. Faboo can achieve these meters through walking, running and erging. Official meters are recorded through Strava. If they achieve the goal they will receive a total of 250 ultra runner bucks from Mummy. In addition, whoever has the most miles at the end will receive 250 ultra runner bucks (not monopoly or crypto bucks but genuine US bucking bronco bucks) from the other. The underlying motive for the game is to aid in the successful completion of the Kuncheng Hu Challenge. Game on!</div>
 		</div>
 	</div>
 
