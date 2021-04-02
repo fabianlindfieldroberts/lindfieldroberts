@@ -25,6 +25,7 @@
   overflow: hidden;
   margin-right: 20vw;
   margin-left: 20vw;
+  font-size: 1.4vw;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -33,7 +34,7 @@
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding: 0.7vw 1vw;
   transition: 0.3s;
 }
 
@@ -42,10 +43,6 @@
   background-color: #ddd;
 }
 
-/* Create an active/current tablink class */
-#tabs button.active {
-  background-color: #ccc;
-} 
 /*****************************************************/
 /* Graphs                                            */
 /*****************************************************/
@@ -57,6 +54,7 @@
 	height: 40vw;
 	vertical-align: top;
 	overflow: hidden;
+	font-size: 1.2vw;
 }
 .svg_content_responsive {
 	display: inline-block;
@@ -87,25 +85,29 @@
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding: 0.2vw 0.4vw;
+  margin: 0;
   transition: 0.3s;
   background-color: #eee;
 }
 
 /* Change background color of buttons on hover */
 #buttons button:hover {
-  background-color: #ddd;
+  background-color: #ccc;
 }
 
 /* Create an active/current tablink class */
 #buttons button.active {
-  background-color: #ccc;
+  background-color: #ddd;
 } 
 
 #cumulative_button {
-	display: none;
+  border-top-left-radius: 0.3vw;
+  border-bottom-left-radius: 0.3vw;
 }
 #non_cumulative_button {
+  border-top-right-radius: 0.3vw;
+  border-bottom-right-radius: 0.3vw;
 }
 
 /*****************************************************/
@@ -119,6 +121,7 @@
 	padding-top: 5vw;
 	padding-right: 3vw;
 	padding-left: 3vw;
+	font-size: 1.2vw;
 }
 
 #stats_table {
@@ -150,6 +153,7 @@ td, th {
 	padding-top: 5vw;
 	padding-right: 3vw;
 	padding-left: 3vw;
+	font-size: 1.2vw;
 }
 
 

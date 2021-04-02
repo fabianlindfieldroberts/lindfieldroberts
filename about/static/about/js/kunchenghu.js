@@ -243,13 +243,13 @@ d3.csv(graphDataCSV).then(function(data) {
 
   // respond to click on cumulative and non cumulative buttons
   d3.select("#cumulative_button").on("click", function() {
-    $("#cumulative_button").hide();
-    $("#non_cumulative_button").show();
+    $("#non_cumulative_button").removeClass("active");
+    $("#cumulative_button").addClass("active");
     toggleGraph("cumulative", "cumulative");
   });
   d3.select("#non_cumulative_button").on("click", function() {
-    $("#non_cumulative_button").hide();
-    $("#cumulative_button").show();
+    $("#cumulative_button").removeClass("active");
+    $("#non_cumulative_button").addClass("active");
     toggleGraph("nonCumulative", "non_cumulative");
   });
 
