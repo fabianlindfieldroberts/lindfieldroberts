@@ -87,7 +87,7 @@ d3.csv(graphDataCSV).then(function(data) {
   graphY.domain([0, d3.max(data, function(d) {
     return Math.max(d.faboo_cumulative, d.daddy_cumulative, d.avg_goal_cumulative); })]);
 
-  var cutoffDate = new Date(2021, 3, 2);
+  var cutoffDate = new Date(2021, 3, 6); // year, month (0 indexed), day
   actualData = data.filter(function(d) {
     return d.date <= cutoffDate;
   });
@@ -95,12 +95,50 @@ d3.csv(graphDataCSV).then(function(data) {
     return d.date >= cutoffDate;
   });
 
+  // add the X Axis
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(graphX))
+    .selectAll("text")  
+    .style("text-anchor", "end")
+    .attr("transform", "translate(-10,0)rotate(-45)");
+
+  // add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(graphY))
+      .attr("class", "y_axis");
+
   // add goal line
   var avgGoalLine = svg.append("path")
     .data([data])
     .attr("class", "line")
     .style("stroke-dasharray", ("3, 3"))
     .attr("d", cumulativeAvgGoalLine);
+
+  // legend
+  svg.append("circle")
+    .attr("cx",475)
+    .attr("cy",320)
+    .attr("r", 4)
+    .style("fill", "crimson")
+  svg.append("circle")
+    .attr("cx",475)
+    .attr("cy",335)
+    .attr("r", 4)
+    .style("fill", "mediumseagreen")
+  svg.append("text")
+    .attr("x", 482)
+    .attr("y", 320)
+    .text("Faboo")
+    .style("font-size", "13px")
+    .attr("alignment-baseline","middle")
+  svg.append("text")
+    .attr("x", 482)
+    .attr("y", 335)
+    .text("Daddy")
+    .style("font-size", "13px")
+    .attr("alignment-baseline","middle")
+
 
   // add custom goal for fabian
   var fabooGoalLine = svg.append("path")
@@ -138,6 +176,14 @@ d3.csv(graphDataCSV).then(function(data) {
     .attr("stroke-width", 1)
     .attr("fill", "crimson")
 
+  // add faboo head
+  var fabooHead = svg.append('image')
+    .attr('xlink:href', fabooHeadPNG)
+    .attr('width', 20)
+    .attr('height', 20)
+    .attr("x", function() { return graphX(actualData[actualData.length - 1].date) - 10 } )
+    .attr("y", function() { return graphY(actualData[actualData.length - 1].faboo_cumulative) - 10 } )
+
   // add the daddy path and dots
   var daddyLine = svg.append("path")
     .data([actualData])
@@ -158,18 +204,13 @@ d3.csv(graphDataCSV).then(function(data) {
     .attr("stroke-width", 1)
     .attr("fill", "mediumseagreen")
 
-  // add the X Axis
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(graphX))
-    .selectAll("text")  
-    .style("text-anchor", "end")
-    .attr("transform", "translate(-10,0)rotate(-45)");
-
-  // add the Y Axis
-  svg.append("g")
-      .call(d3.axisLeft(graphY))
-      .attr("class", "y_axis");
+  // add daddy head
+  var daddyHead = svg.append('image')
+    .attr('xlink:href', daddyHeadPNG)
+    .attr('width', 20)
+    .attr('height', 20)
+    .attr("x", function() { return graphX(actualData[actualData.length - 1].date) - 10 } )
+    .attr("y", function() { return graphY(actualData[actualData.length - 1].daddy_cumulative) - 10 } )
 
 
   // update the chart to show the data for the selected group
@@ -223,10 +264,19 @@ d3.csv(graphDataCSV).then(function(data) {
         ); 
       });
 
+    fabooHead
+      .transition()
+      .duration(1000)
+      .attr("y", function() {
+        return graphY(
+          eval( "actualData[actualData.length - 1].faboo_" + selectedColumnText )
+        ) - 10
+      });
+
     daddyLine
       .transition()
       .duration(1000)
-      .attr("d", eval(selectedVariableText + "LineDaddy"))
+      .attr("d", eval(selectedVariableText + "LineDaddy"));
 
     daddyDots
       .transition()
@@ -238,6 +288,14 @@ d3.csv(graphDataCSV).then(function(data) {
         ); 
       });
 
+    daddyHead
+      .transition()
+      .duration(1000)
+      .attr("y", function() {
+        return graphY(
+          eval( "actualData[actualData.length - 1].daddy_" + selectedColumnText )
+        ) - 10
+      });
 
   }
 
@@ -307,16 +365,25 @@ $("#rules_button").click(function() {
   $("#graph_container").hide();
   $("#stats_container").hide();
   $("#rules_container").show();
+  $("#graphs_button").removeClass("active");
+  $("#stats_button").removeClass("active");
+  $("#rules_button").addClass("active");
 });
 $("#graphs_button").click(function() {
   $("#rules_container").hide();
   $("#stats_container").hide();
   $("#graph_container").show();
+  $("#rules_button").removeClass("active");
+  $("#stats_button").removeClass("active");
+  $("#graphs_button").addClass("active");
 });
 $("#stats_button").click(function() {
   $("#rules_container").hide();
   $("#graph_container").hide();
   $("#stats_container").show();
+  $("#graphs_button").removeClass("active");
+  $("#rules_button").removeClass("active");
+  $("#stats_button").addClass("active");
 });
 
 

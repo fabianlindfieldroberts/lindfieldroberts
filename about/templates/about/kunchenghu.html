@@ -13,8 +13,12 @@
 	<script src="https://d3js.org/d3.v6.min.js"></script>
 	<!-- Access to static files from JS -->
 	<script> 
+		// csv files to be included in js
 		var graphDataCSV = "{% static 'about/csv/graphWeek1.csv' %}";
 		var statsDataCSV = "{% static 'about/csv/statsWeek1.csv' %}";
+		// images to be included in js
+		var fabooHeadPNG = "{% static 'about/images/fabian_head200.png' %}";
+		var daddyHeadPNG = "{% static 'about/images/daddy_head200.png' %}";
 	</script>
 	<!-- Build chart using D3.js -->
 	<script src="{% static 'about/js/kunchenghu.js' %}"></script>
@@ -27,7 +31,7 @@
 		
 		<div class="content_container">
 			<div id="tabs">
-				<button type="button" id="graphs_button">Graphs</button>
+				<button type="button" id="graphs_button" class="active">Graphs</button>
 				<button type="button" id="stats_button">Stats</button>
 				<button type="button" id="rules_button">Rules</button>
 			</div>
@@ -37,7 +41,7 @@
 					<button type="button" id="cumulative_button" class="active">
 						Cumulative
 					</button><button type="button" id="non_cumulative_button">
-						Non-Cumulative
+						Meters/Day
 					</button>
 				</div>
 			</div>

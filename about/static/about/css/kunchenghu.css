@@ -40,8 +40,12 @@
 
 /* Change background color of buttons on hover */
 #tabs button:hover {
-  background-color: #ddd;
+  background-color: #ccc;
 }
+
+#tabs button.active {
+  background-color: #ddd;
+} 
 
 /*****************************************************/
 /* Graphs                                            */
@@ -74,14 +78,14 @@
 #buttons {
 	width: inherit;
 	padding-top: 1vw;
-	padding-left: 8vw;
+	/*padding-right: 1.5vw;*/
 	/*border: solid black 1px;*/
-	text-align: left;
+	text-align: center;
+	padding-bottom: 5vw;
 	position: relative;
 }
 /* Style the buttons that are used to open the tab content */
 #buttons button {
-  background-color: inherit;
   border: none;
   outline: none;
   cursor: pointer;
