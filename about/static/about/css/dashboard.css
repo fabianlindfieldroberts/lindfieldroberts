@@ -1,0 +1,212 @@
+.page_container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: top; /* Location of items vertically */
+	align-content: center; /* Space between items */
+	justify-content: center; /* Location of items horizontally */
+	width: 100vw;
+	min-height: 100vh; /* Allows for scrolling if the content goes beyond vh */
+	font-weight: 900;
+}
+
+.content_container {
+	text-align: center;
+	font-family: "Lucida Console", "Courier New", monospace;
+	width: 70vw;
+	margin: 0;
+	padding: 0;
+}
+
+.hidden_on_load {
+	display: none;
+}
+
+/*****************************************************/
+/* Tabs                                              */
+/*****************************************************/
+/* Style the tab */
+#tabs {
+  overflow: hidden;
+  margin-right: 20vw;
+  margin-left: 20vw;
+  font-size: 1.4vw;
+}
+
+/* Style the buttons that are used to open the tab content */
+#tabs button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.7vw 1vw;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+#tabs button:hover {
+  background-color: #ccc;
+}
+
+#tabs button.active {
+  background-color: #ddd;
+} 
+
+/*****************************************************/
+/* Graphs                                            */
+/*****************************************************/
+
+#graph_container {
+	position: relative;
+	/*width: 60vw;*/
+	height: 40vw;
+	vertical-align: top;
+	overflow: hidden;
+	font-size: 1.2vw;
+}
+.svg_content_responsive {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.line {
+	fill: none;
+	stroke: steelblue;
+	stroke-width: 2px;
+}
+
+#graph {
+	line-height: 20vw;
+	height: 40vw;
+}
+#buttons {
+	width: inherit;
+	padding-top: 1vw;
+	/*padding-right: 1.5vw;*/
+	/*border: solid black 1px;*/
+	text-align: center;
+	padding-bottom: 5vw;
+	position: relative;
+}
+/* Style the buttons that are used to open the tab content */
+#buttons button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.2vw 0.4vw;
+  margin: 0;
+  transition: 0.3s;
+  background-color: #eee;
+}
+
+/* Change background color of buttons on hover */
+#buttons button:hover {
+  background-color: #ccc;
+}
+
+/* Create an active/current tablink class */
+#buttons button.active {
+  background-color: #ddd;
+} 
+
+#cumulative_button {
+  border-top-left-radius: 0.3vw;
+  border-bottom-left-radius: 0.3vw;
+}
+#non_cumulative_button {
+  border-top-right-radius: 0.3vw;
+  border-bottom-right-radius: 0.3vw;
+}
+
+/*****************************************************/
+/* Stats                                             */
+/*****************************************************/
+
+#stats_container {
+	text-align: center;
+	height: 40vw;
+	padding-top: 5vw;
+	padding-right: 3vw;
+	padding-left: 3vw;
+	font-size: 1.2vw;
+}
+
+#stats_table {
+	display: inline-block;
+}
+
+#stats_table tr td:nth-child(1) {
+	text-align: left;
+}
+#stats_table tr td:nth-child(2) {
+	text-align: right;
+}
+#stats_table tr td:nth-child(3) {
+	text-align: right;
+}
+#stats_table tr td:nth-child(4) {
+	text-align: right;
+}
+#stats_table tr td:nth-child(5) {
+	text-align: left;
+}
+
+td, th {
+    padding: 1px 4px;
+    border: 1px black solid;
+}
+
+/*****************************************************/
+/* Rules                                             */
+/*****************************************************/
+
+#rules_container {
+	height: 40vw;
+	padding-top: 5vw;
+	padding-right: 3vw;
+	padding-left: 3vw;
+	font-size: 1.2vw;
+}
+
+
+/*****************************************************/
+/* Form                                              */
+/*****************************************************/
+
+#submit_container {
+	height: 40vw;
+	padding-top: 5vw;
+	padding-right: 3vw;
+	padding-left: 3vw;
+	font-size: 1.2vw;
+}
+
+input.text_input {
+	width: 20vw;
+	border-radius: 0;
+	border: none;
+	border-bottom: 0.2vw dashed black;
+	margin-bottom: 0.3vw;
+}
+select {
+	width: 20vw;
+	border-radius: 0;
+	border: none;
+	border-bottom: 0.2vw dashed black;
+	margin-bottom: 0.3vw;
+}
+#form_submit_button {
+	width: 11.2vw;
+}
+
+#error {
+	color: red;
+}
+
+
+
+
+
+
+
