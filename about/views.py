@@ -32,7 +32,7 @@ from django.utils import timezone
 # Formatting django queryset to JSON response
 from django.http import JsonResponse
 from django.db.models import F, Value, CharField, Max, Sum, Avg
-from django.db.models.functions import Cast, ExtractHour, ExtractMinute, ExtractSecond, Concat
+from django.db.models.functions import Cast, ExtractHour, ExtractMinute, ExtractSecond, Concat, Round
 
 
 # Debug
@@ -253,8 +253,9 @@ def all_entries(request, gameName):
 				Hour=ExtractHour('dateCreated'),
 				Minute=ExtractMinute('dateCreated'),
 				Second=ExtractSecond('dateCreated'),
+				SecondRounded = Round('Second'), # This works in PostgreSQL but not SQLite
 				Time=Concat(
-					'Hour', Value(':'), 'Minute', Value(':'), 'Second', Value(' UCT'),
+					'Hour', Value(':'), 'Minute', Value(':'), 'SecondRounded',
 					output_field=CharField()
 				)
 			) \

@@ -1,5 +1,5 @@
 // build table
-function tabulate(data, columns, div) {
+function tabulate(data, columns, tableHeaders, div) {
   var table = d3.select(div)
     .append('table')
     .attr("id", "stats_table")
@@ -8,7 +8,7 @@ function tabulate(data, columns, div) {
 
   thead.append('tr')
     .selectAll('th')
-    .data(columns)
+    .data(tableHeaders)
     .enter()
     .append('th')
     .text(function (d) { return d })
@@ -37,13 +37,14 @@ function tabulate(data, columns, div) {
 // all_entries table
 d3.json(entriesDataJSON).then(function(data) {
   var columns = ['Participant', 'Date', 'Time', 'Minutes', 'Comment'];
-  tabulate(data, columns, "#all_entries");
+  var tableHeaders = ['Participant', 'Date', 'Time (UCT)', 'Minutes', 'Comment'];
+  tabulate(data, columns, tableHeaders, "#all_entries");
 });
 
 // summary_stats table
 d3.json(statsDataJSON).then(function(data) {
   var columns = ['Stat', 'Mummy', 'Faboo', 'BigG'];
-  tabulate(data, columns, "#summary_stats");
+  tabulate(data, columns, columns, "#summary_stats");
 });
 
 $(document).ready(function() {
