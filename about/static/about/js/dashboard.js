@@ -1,46 +1,49 @@
-// get the stats table data
-d3.json(entriesDataJSON).then(function(data) {
+// build table
+function tabulate(data, columns, div) {
+  var table = d3.select(div)
+    .append('table')
+    .attr("id", "stats_table")
+  var thead = table.append('thead')
+  var tbody = table.append('tbody')
 
-  // build stats table
-  function tabulate(data,columns) {
-    var table = d3.select('#stats_container')
-      .append('table')
-      .attr("id", "stats_table")
-    var thead = table.append('thead')
-    var tbody = table.append('tbody')
+  thead.append('tr')
+    .selectAll('th')
+    .data(columns)
+    .enter()
+    .append('th')
+    .text(function (d) { return d })
 
-    thead.append('tr')
-      .selectAll('th')
-      .data(columns)
-      .enter()
-      .append('th')
-      .text(function (d) { return d })
+  var rows = tbody.selectAll('tr')
+    .data(data)
+    .enter()
+    .append('tr')
 
-    var rows = tbody.selectAll('tr')
-      .data(data)
-      .enter()
-      .append('tr')
-
-    var cells = rows.selectAll('td')
-      .data(function(row) {
-        return columns.map(function (column) {
-          return { 
-            column: column, 
-            value: row[column] 
-          }
-        })
+  var cells = rows.selectAll('td')
+    .data(function(row) {
+      return columns.map(function (column) {
+        return { 
+          column: column, 
+          value: row[column] 
+        }
       })
-      .enter()
-      .append('td')
-      .text(function (d) { return d.value })
+    })
+    .enter()
+    .append('td')
+    .text(function (d) { return d.value })
 
-    return table;
-  }
+  return table;
+}
 
-  
-  var columns = ['Participant', 'Date', 'Time', 'Duration', 'Comment'];
-  tabulate(data,columns);
+// all_entries table
+d3.json(entriesDataJSON).then(function(data) {
+  var columns = ['Participant', 'Date', 'Time', 'Minutes', 'Comment'];
+  tabulate(data, columns, "#all_entries");
+});
 
+// summary_stats table
+d3.json(statsDataJSON).then(function(data) {
+  var columns = ['Stat', 'Mummy', 'Faboo', 'BigG'];
+  tabulate(data, columns, "#summary_stats");
 });
 
 $(document).ready(function() {

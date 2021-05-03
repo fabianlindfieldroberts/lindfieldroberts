@@ -22,7 +22,11 @@ class HighScore(models.Model):
 
 # Represents a game
 class Game(models.Model):
+	users = models.ManyToManyField(settings.AUTH_USER_MODEL) # Django will create join table in backend
 	name = models.CharField(max_length=50)
+	groupGoal = models.IntegerField()
+	individualGoal = models.IntegerField()
+	individualMinimum = models.IntegerField()
 	rules = models.CharField(max_length=2000)
 	startDate = models.DateTimeField(default=None)
 	endDate = models.DateTimeField(default=None)
@@ -47,8 +51,6 @@ class Day(models.Model):
 	date = models.DateField(default=None)
 	durationNonCumulative = models.IntegerField(default=None, blank=True, null=True)
 	durationCumulative = models.IntegerField(default=None, blank=True, null=True)
-	goalNonCumulative = models.IntegerField(default=None, blank=True, null=True)
-	goalCumulative = models.IntegerField(default=None, blank=True, null=True)
 	dateCreated = models.DateTimeField(default=timezone.now)
 	dateModified = models.DateTimeField(default=timezone.now)
 	activeFlag = models.BooleanField(default=True)

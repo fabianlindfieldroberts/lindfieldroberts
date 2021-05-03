@@ -22,6 +22,8 @@ from about.forms import HighScoreForm
 # Appalachia model and form
 from about.models import Game, Day, Stat 
 from about.forms import StatForm
+# Users
+from django.contrib.auth.models import User
 
 # Date and time zone
 import datetime
@@ -29,8 +31,9 @@ from django.utils import timezone
 
 # Formatting django queryset to JSON response
 from django.http import JsonResponse
-from django.db.models import F, Value, CharField
+from django.db.models import F, Value, CharField, Max, Sum, Avg
 from django.db.models.functions import Cast, ExtractHour, ExtractMinute, ExtractSecond, Concat
+
 
 # Debug
 from sys import stderr
@@ -130,15 +133,37 @@ def dashboard(request, gameName):
 					password=form.cleaned_data['password']
 				)
 				# Get the Day object for the current user and date
-				dayQuerySet = Day.objects.filter(
+				todayQuerySet = Day.objects.filter(
 					user=user, 
 					game=game, 
-					date__year=timezone.now().year,
-					date__month=timezone.now().month,
-					date__day=timezone.now().day
+					date__year=datetime.date.today().year,
+					date__month=datetime.date.today().month,
+					date__day=datetime.date.today().day
 				)
-				if gameQuerySet.exists():
-					day = dayQuerySet[0]
+				if todayQuerySet.exists():
+					day = todayQuerySet[0]
+					# Update day, add to cumulative and non-cumulative durations
+					if day.durationCumulative and day.durationNonCumulative:
+						day.durationCumulative += form.cleaned_data['duration']
+						day.durationNonCumulative += form.cleaned_data['duration']
+					# day values have not yet been set
+					else:
+						day.durationNonCumulative = form.cleaned_data['duration']
+						yesterdayDateTime = datetime.date.today() - datetime.timedelta(1)
+						yesterdayQuerySet = Day.objects.filter(
+							user=user, 
+							game=game, 
+							date__year=yesterdayDateTime.year,
+							date__month=yesterdayDateTime.month,
+							date__day=yesterdayDateTime.day
+						)
+						if yesterdayQuerySet.exists():
+							day.durationCumulative = yesterdayQuerySet[0].durationCumulative + form.cleaned_data['duration']
+						else:
+							day.durationCumulative = form.cleaned_data['duration']
+
+
+					day.save()
 					# Create a stat database entry
 					stat = Stat(
 						user=user,
@@ -166,12 +191,54 @@ def dashboard(request, gameName):
 
 # API views
 def minutes_by_day(request, gameName):
-	data={}
-	return JsonResponse(list(data), safe=False)
+	gameQuerySet = Game.objects.filter(name=gameName)
+	if not gameQuerySet.exists():
+		data = {}
+	else:
+		game = gameQuerySet[0]
+		users = User.objects.filter(game=game)
+		data = {}
+		for user in users:
+			day = Day.objects.filter(game=game, user=user, durationNonCumulative__isnull=False) \
+				.annotate(Date=F('date')) \
+				.annotate(DurationNonCumulative=F('durationNonCumulative')) \
+				.annotate(DurationCumulative=F('durationCumulative')) \
+				.values('Date', 'DurationNonCumulative', 'DurationCumulative')
+			data[user.username] = list(day)
+	return JsonResponse(data, safe=False)
 
 def summary_stats(request, gameName):
-	data = {}
-	return JsonResponse(list(data), safe=False)
+	gameQuerySet = Game.objects.filter(name=gameName)
+	if not gameQuerySet.exists():
+		data = {}
+	else:
+		game = gameQuerySet[0]
+		data = []
+		minutesSoFar = {
+			'Stat': 'Minutes So Far'
+		}
+		minutesToMin = {
+			'Stat': 'Minutes To Minimum'
+		}
+		minutesToGoal = {
+			'Stat': 'Minutes To Goal'
+		}
+		perDayAverage = {
+			'Stat': 'Per Day Average'
+		}
+		users = User.objects.filter(game=game)
+		for user in users:
+			username = user.username[:1].upper() + user.username[1:]
+			day = Day.objects.filter(game=game, user=user, durationCumulative__isnull=False, durationNonCumulative__isnull=False)
+			minutesSoFar[username] = day.aggregate(Max('durationCumulative'))['durationCumulative__max']
+			minutesToMin[username] = game.individualMinimum - minutesSoFar[username]
+			minutesToGoal[username] = game.individualGoal - minutesSoFar[username]
+			perDayAverage[username] = day.aggregate(Avg('durationNonCumulative'))['durationNonCumulative__avg']
+		data.append(minutesSoFar)
+		data.append(minutesToMin)
+		data.append(minutesToGoal)
+		data.append(perDayAverage)
+	return JsonResponse(data, safe=False)
 
 def all_entries(request, gameName):
 	gameQuerySet = Game.objects.filter(name=gameName)
@@ -192,9 +259,9 @@ def all_entries(request, gameName):
 				)
 			) \
 			.annotate(Comment=F('comment')) \
-			.annotate(Duration=F('duration')) \
-			.values('Participant', 'Date', 'Time', 'Comment', 'Duration') \
-			.order_by('dateCreated', 'Duration') 
+			.annotate(Minutes=F('duration')) \
+			.values('Participant', 'Date', 'Time', 'Comment', 'Minutes') \
+			.order_by('-dateCreated', 'duration') 
 	return JsonResponse(list(data), safe=False)
 
 
