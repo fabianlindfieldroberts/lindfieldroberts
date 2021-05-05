@@ -87,7 +87,7 @@ d3.csv(graphDataCSV).then(function(data) {
   graphY.domain([0, d3.max(data, function(d) {
     return Math.max(d.faboo_cumulative, d.daddy_cumulative, d.avg_goal_cumulative); })]);
 
-  var cutoffDate = new Date(2021, 3, 27); // year, month (0 indexed), day
+  var cutoffDate = new Date(2021, 4, 4); // year, month (0 indexed), day
   actualData = data.filter(function(d) {
     return d.date <= cutoffDate;
   });
