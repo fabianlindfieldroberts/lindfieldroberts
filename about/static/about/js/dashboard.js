@@ -43,8 +43,9 @@ d3.json(entriesDataJSON).then(function(data) {
 
 // summary_stats table
 d3.json(statsDataJSON).then(function(data) {
-  var columns = ['Stat', 'Mummy', 'Faboo', 'BigG'];
-  tabulate(data, columns, columns, "#summary_stats");
+  var columns = ['Stat', 'Mummy', 'Faboo', 'BigG', 'Appalachia'];
+  var tableHeaders = ['Stat', 'Mummy', 'Faboo', 'BigG', 'Team Lindies'];
+  tabulate(data, columns, tableHeaders, "#summary_stats");
 });
 
 $(document).ready(function() {
@@ -74,8 +75,19 @@ $(document).ready(function() {
     $("#submit_button").addClass("active");
   });
 
+  // Prevent the form from being submitted if user reloads page
+  // Only works on some browsers
+  if ( window.history.replaceState ) {
+      window.history.replaceState( null, null, window.location.href );
+  }
+
 
   $('form').submit(function(e) {
+    // Prevent the form from being submitted if user hits button twice
+    $('form').submit(function(){
+        return false;
+    });
+    // Check the attestation is checked
     if ($(this).find('input[name="attestation"]')[0].checked === false) {
       $('#error').html("Attestation check unselected");
       return false;

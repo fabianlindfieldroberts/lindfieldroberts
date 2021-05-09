@@ -32,29 +32,12 @@
 		
 		<div class="content_container">
 			<div id="tabs">
-				<button 
-					type="button" 
-					id="graphs_button" 
-					{% if not showFormTab %}
-						class="active"
-					{% endif %}
-				>Graphs</button>
+				<button type="button" id="graphs_button" class="active">Graphs</button>
 				<button type="button" id="stats_button">Stats</button>
 				<button type="button" id="rules_button">Rules</button>
-				<button 
-					type="button" 
-					id="submit_button" 
-					{% if showFormTab %}
-						class="active"
-					{% endif %}
-				>Submit</button>
+				<button type="button" id="submit_button">Submit</button>
 			</div>
-			<div 
-				{% if showFormTab %}
-					class="hidden_on_load" 
-				{% endif %}
-				id="graph_container"
-			>
+			<div id="graph_container">
 				<div id="graph">Graph coming soon...</div>
 			</div>
 			<div class="hidden_on_load" id="stats_container">
@@ -62,12 +45,7 @@
 				<div id="all_entries"></div>
 			</div>
 			<div class="hidden_on_load" id="rules_container">{{ rules }}</div>
-			<div 
-				{% if not showFormTab %}
-					class="hidden_on_load" 
-				{% endif %}
-				id="submit_container"
-			>
+			<div class="hidden_on_load" id="submit_container">
 				<div id="error">
 					{% if form.errors %}
 					    {% for field in form %}

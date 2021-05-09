@@ -112,16 +112,16 @@ def kunchenghu(request):
 #################################################################
 def dashboard(request, gameName):
 	# Display the appalachia page
-	template = loader.get_template('about/dashboard.html')
 	gameQuerySet = Game.objects.filter(name=gameName)
 	if not gameQuerySet.exists():
-		context = {}
+		html = '<html><body>The game "' + gameName + '" does not exist. Please check your url.</body></html>'
+		return HttpResponse(html)
 	else:
+		template = loader.get_template('about/dashboard.html')
 		game = gameQuerySet[0]
 
 		if request.method == 'GET':
 			form = StatForm()
-			showFormTab = False
 
 		elif request.method == 'POST':
 			form = StatForm(request.POST)
@@ -132,61 +132,82 @@ def dashboard(request, gameName):
 					username=form.cleaned_data['userName'],
 					password=form.cleaned_data['password']
 				)
-				# Get the Day object for the current user and date
-				todayQuerySet = Day.objects.filter(
-					user=user, 
-					game=game, 
-					date__year=datetime.date.today().year,
-					date__month=datetime.date.today().month,
-					date__day=datetime.date.today().day
-				)
-				if todayQuerySet.exists():
-					day = todayQuerySet[0]
-					# Update day, add to cumulative and non-cumulative durations
-					if day.durationCumulative and day.durationNonCumulative:
+				# Get all days less than or equal to today's date with a null cumulative value
+				recentDaysQuerySet = Day.objects.filter(
+					user=user,
+					game=game,
+					date__lte=datetime.date.today(),
+					durationCumulative__isnull=True,
+					durationNonCumulative__isnull=True
+				).order_by('date')
+
+				# If there aren't recent null days then just add to current day
+				if not recentDaysQuerySet.exists():
+					todayQuerySet = Day.objects.filter(
+						user=user, 
+						game=game, 
+						date=datetime.date.today(),
+						durationCumulative__isnull=False,
+						durationNonCumulative__isnull=False
+					)
+					if todayQuerySet.exists():
+						day = todayQuerySet[0]
+						# Update day, add to cumulative and non-cumulative durations
 						day.durationCumulative += form.cleaned_data['duration']
 						day.durationNonCumulative += form.cleaned_data['duration']
-					# day values have not yet been set
-					else:
-						day.durationNonCumulative = form.cleaned_data['duration']
-						yesterdayDateTime = datetime.date.today() - datetime.timedelta(1)
-						yesterdayQuerySet = Day.objects.filter(
-							user=user, 
-							game=game, 
-							date__year=yesterdayDateTime.year,
-							date__month=yesterdayDateTime.month,
-							date__day=yesterdayDateTime.day
-						)
-						if yesterdayQuerySet.exists():
-							day.durationCumulative = yesterdayQuerySet[0].durationCumulative + form.cleaned_data['duration']
-						else:
-							day.durationCumulative = form.cleaned_data['duration']
-
-
-					day.save()
-					# Create a stat database entry
-					stat = Stat(
-						user=user,
-						game=game,
-						day=day,
-						comment=form.cleaned_data['comment'],
-						duration=form.cleaned_data['duration']
+						day.save()
+				# Otherwise then update all recent null days
+				else:
+					durationNonCumulative = 0 # There were no meters recorded on null days
+					lastValidDate = recentDaysQuerySet[0].date - datetime.timedelta(1)
+					lastValidDayQuerySet = Day.objects.filter(
+						user=user, 
+						game=game, 
+						date=lastValidDate
 					)
-					stat.save()
+					if lastValidDayQuerySet.exists():
+						durationCumulative = lastValidDayQuerySet[0].durationCumulative
+					else:
+						durationCumulative = 0
 
-				showFormTab = False
+					# Go through recent days and update durations
+					for i, day in enumerate(recentDaysQuerySet, start=1):
+						# If the last element in loop
+						if i == len(recentDaysQuerySet):
+							day.durationNonCumulative = form.cleaned_data['duration']
+							day.durationCumulative = durationCumulative + form.cleaned_data['duration']
+						# Else just any element in loop
+						else:
+							day.durationNonCumulative = durationNonCumulative
+							day.durationCumulative = durationCumulative
 
-			else:
-				showFormTab = True
+						day.save()
+
+
+					
+				# Create a stat database entry
+				stat = Stat(
+					user=user,
+					game=game,
+					day=day,
+					comment=form.cleaned_data['comment'],
+					duration=form.cleaned_data['duration']
+				)
+				stat.save()
+
+				html = '<html><body>Thanks, ' + user.username \
+					+ '. Your form was submitted successfully. <a href="https://www.lindfieldroberts.com/' \
+					+ gameName + '/">Take me back to homepage.</a></body></html>'
+				return HttpResponse(html)
+
 		
 		context = {
-			'showFormTab': showFormTab,
-			'action': '/appalachia/',
+			'action': '/' + game.name + '/',
 			'attestation': "Not a luder, just a lumpi",
 			'rules': game.rules,
 			'form': form
 		}
-	return HttpResponse(template.render(context, request))
+		return HttpResponse(template.render(context, request))
 
 
 # API views
@@ -214,26 +235,38 @@ def summary_stats(request, gameName):
 	else:
 		game = gameQuerySet[0]
 		data = []
+		teamName = game.name[:1].upper() + game.name[1:]
 		minutesSoFar = {
-			'Stat': 'Minutes So Far'
+			'Stat': 'Minutes So Far',
+			teamName: 0
 		}
 		minutesToMin = {
-			'Stat': 'Minutes To Minimum'
+			'Stat': 'Minutes To Minimum',
+			teamName: 0
 		}
 		minutesToGoal = {
-			'Stat': 'Minutes To Goal'
+			'Stat': 'Minutes To Goal',
+			teamName: 0
 		}
 		perDayAverage = {
-			'Stat': 'Per Day Average'
+			'Stat': 'Per Day Average',
+			teamName: 0
 		}
 		users = User.objects.filter(game=game)
 		for user in users:
 			username = user.username[:1].upper() + user.username[1:]
+			
 			day = Day.objects.filter(game=game, user=user, durationCumulative__isnull=False, durationNonCumulative__isnull=False)
 			minutesSoFar[username] = day.aggregate(Max('durationCumulative'))['durationCumulative__max']
+			minutesSoFar[teamName] += minutesSoFar[username]
 			minutesToMin[username] = game.individualMinimum - minutesSoFar[username]
+			minutesToMin[teamName] += minutesToMin[username]
 			minutesToGoal[username] = game.individualGoal - minutesSoFar[username]
+			minutesToGoal[teamName] += minutesToGoal[username]
 			perDayAverage[username] = day.aggregate(Avg('durationNonCumulative'))['durationNonCumulative__avg']
+			perDayAverage[teamName] += perDayAverage[username]
+
+		perDayAverage[teamName] = perDayAverage[teamName]/len(users)
 		data.append(minutesSoFar)
 		data.append(minutesToMin)
 		data.append(minutesToGoal)
