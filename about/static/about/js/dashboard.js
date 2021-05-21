@@ -2,7 +2,7 @@
 function tabulate(data, columns, tableHeaders, div) {
   var table = d3.select(div)
     .append('table')
-    .attr("id", "stats_table")
+    .attr("class", "stats_table")
   var thead = table.append('thead')
   var tbody = table.append('tbody')
 
@@ -12,6 +12,8 @@ function tabulate(data, columns, tableHeaders, div) {
     .enter()
     .append('th')
     .text(function (d) { return d })
+
+
 
   var rows = tbody.selectAll('tr')
     .data(data)
@@ -41,11 +43,18 @@ d3.json(entriesDataJSON).then(function(data) {
   tabulate(data, columns, tableHeaders, "#all_entries");
 });
 
-// summary_stats table
-d3.json(statsDataJSON).then(function(data) {
+// player_stats table
+d3.json(playerStatsDataJSON).then(function(data) {
   var columns = ['Stat', 'Mummy', 'Faboo', 'BigG', 'Appalachia'];
   var tableHeaders = ['Stat', 'Mummy', 'Faboo', 'BigG', 'Team Lindies'];
-  tabulate(data, columns, tableHeaders, "#summary_stats");
+  tabulate(data, columns, tableHeaders, "#player_stats");
+});
+
+// player_stats table
+d3.json(gameStatsDataJSON).then(function(data) {
+  var columns = ['Elapsed', 'Remaining'];
+  var tableHeaders = ['Days Elapsed', 'Days Remaining'];
+  tabulate(data, columns, tableHeaders, "#game_stats");
 });
 
 $(document).ready(function() {

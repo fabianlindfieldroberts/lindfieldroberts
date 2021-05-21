@@ -132,25 +132,32 @@
 	font-size: 1.2vw;
 }
 
-#stats_table {
+.stats_table {
 	display: inline-block;
 }
 
-#stats_table tr td:nth-child(1) {
+.stats_table tr td:nth-child(1), .stats_table th td:nth-child(1) {
 	text-align: left;
 }
-#stats_table tr td:nth-child(2) {
+#game_stats .stats_table tr td:nth-child(1), #game_stats .stats_table th td:nth-child(1) {
 	text-align: right;
 }
-#stats_table tr td:nth-child(3) {
+.stats_table tr td:nth-child(2), .stats_table th td:nth-child(2) {
 	text-align: right;
 }
-#stats_table tr td:nth-child(4) {
+.stats_table tr td:nth-child(3), .stats_table th td:nth-child(3) {
 	text-align: right;
 }
-#stats_table tr td:nth-child(5) {
+.stats_table tr td:nth-child(4), .stats_table th td:nth-child(4) {
+	text-align: right;
+}
+.stats_table tr td:nth-child(5), .stats_table th td:nth-child(5) {
+	text-align: right;
+}
+#all_entries .stats_table tr td:nth-child(5), #all_entries .stats_table th td:nth-child(5) {
 	text-align: left;
 }
+
 
 td, th {
     padding: 1px 4px;

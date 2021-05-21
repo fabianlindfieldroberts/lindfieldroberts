@@ -228,12 +228,32 @@ def minutes_by_day(request, gameName):
 			data[user.username] = list(day)
 	return JsonResponse(data, safe=False)
 
-def summary_stats(request, gameName):
+def game_stats(request, gameName):
+	gameQuerySet = Game.objects.filter(name=gameName)
+	if not gameQuerySet.exists():
+		data = {}
+	else:
+		game = gameQuerySet[0]	
+		today = datetime.datetime.now(timezone.utc)
+		elapsedDelta = today - game.startDate
+		remainingDelta = game.endDate - today
+		daysElapsed = elapsedDelta.days
+		daysRemaining = remainingDelta.days
+		data = [{
+			'Elapsed': daysElapsed,
+			'Remaining': daysRemaining
+		}]
+	return JsonResponse(data, safe=False)
+
+def player_stats(request, gameName):
 	gameQuerySet = Game.objects.filter(name=gameName)
 	if not gameQuerySet.exists():
 		data = {}
 	else:
 		game = gameQuerySet[0]
+		today = datetime.datetime.now(timezone.utc)
+		datesDelta = today - game.startDate
+		daysElapsed = datesDelta.days
 		data = []
 		teamName = game.name[:1].upper() + game.name[1:]
 		minutesSoFar = {
@@ -263,10 +283,11 @@ def summary_stats(request, gameName):
 			minutesToMin[teamName] += minutesToMin[username]
 			minutesToGoal[username] = game.individualGoal - minutesSoFar[username]
 			minutesToGoal[teamName] += minutesToGoal[username]
-			perDayAverage[username] = day.aggregate(Avg('durationNonCumulative'))['durationNonCumulative__avg']
+			unroundedPerDayAverage = minutesSoFar[username]/daysElapsed
+			perDayAverage[username] = round(unroundedPerDayAverage, 2)
 			perDayAverage[teamName] += perDayAverage[username]
 
-		perDayAverage[teamName] = perDayAverage[teamName]/len(users)
+		perDayAverage[teamName] = round(perDayAverage[teamName]/len(users), 2)
 		data.append(minutesSoFar)
 		data.append(minutesToMin)
 		data.append(minutesToGoal)
