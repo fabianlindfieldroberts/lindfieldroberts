@@ -4,56 +4,25 @@ var width = 600 - margin.left - margin.right;
 var height = 400 - margin.top - margin.bottom;
 
 // parse the date / time
-var parseTime = d3.timeParse("%d-%b-%y");
+var parseTime = d3.timeParse("%Y-%m-%d");
 
 // set the ranges
 var graphX = d3.scaleTime().range([0, width]);
 var graphY = d3.scaleLinear().range([height, 0]);
 
 
-// define cumulative and non cumulative lines for players
-var cumulativeLineFaboo = d3.line()
-  .x(function(d) { return graphX(d.date); })
-  .y(function(d) { return graphY(d.faboo_cumulative); });
-
-var nonCumulativeLineFaboo = d3.line()
-  .x(function(d) { return graphX(d.date); })
-  .y(function(d) { return graphY(d.faboo_non_cumulative); });
-
-var cumulativeLineDaddy = d3.line()
-    .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.mummy_cumulative); });
-
-var nonCumulativeLineDaddy = d3.line()
-    .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.mummy_non_cumulative); });
-
+var colorList = ["mediumseagreen", "crimson", "coral", "darkolivegreen", "palevioletred"];
 
 // define average cumulative and non cumulative goal lines
 var cumulativeAvgGoalLine = d3.line()
     .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.avg_goal_cumulative); });
+    .y(function(d) { return graphY(d.DurationCumulative); });
 
 var nonCumulativeAvgGoalLine = d3.line()
     .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.avg_goal_non_cumulative); });
+    .y(function(d) { return graphY(d.DurationNonCumulative); });
 
-// define customized goal lines cumulative and non cumulative
-var cumulativeCustomGoalLineFaboo = d3.line()
-    .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.faboo_custom_goal_cumulative); });
 
-var nonCumulativeCustomGoalLineFaboo = d3.line()
-    .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.faboo_custom_goal_non_cumulative); });
-
-var cumulativeCustomGoalLineDaddy = d3.line()
-    .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.daddy_custom_goal_cumulative); });
-
-var nonCumulativeCustomGoalLineDaddy = d3.line()
-    .x(function(d) { return graphX(d.date); })
-    .y(function(d) { return graphY(d.daddy_custom_goal_non_cumulative); });
 
 // append the svg obgect to graph container
 // appends a 'group' element to 'svg'
@@ -71,27 +40,47 @@ var svg = d3.select("#graph")
 
 
 // get the graph data
-d3.csv(graphDataJSON).then(function(data) {
+d3.json(graphDataJSON).then(function(data) {
 
-  // format the data
-  data.forEach(function(d) {
-      d.date = parseTime(d.date);
-      d.faboo_cumulative = +d.faboo_cumulative;
-      d.daddy_cumulative = +d.daddy_cumulative;
-  });
+  // create the graph lines, format the date
+  var svgLines = {};
+  var cumulativeLines = {};
+  var nonCumulativeLines = {};
 
-  // scale the range of the data
-  graphX.domain(d3.extent(data, function(d) { return d.date; }));
-  graphY.domain([0, d3.max(data, function(d) {
-    return Math.max(d.faboo_cumulative, d.daddy_cumulative, d.avg_goal_cumulative); })]);
+  // Loop through all people in game
+  for (var person in data) {
 
-  var cutoffDate = new Date(2021, 4, 18); // year, month (0 indexed), day
-  actualData = data.filter(function(d) {
-    return d.date <= cutoffDate;
-  });
-  predictedData = data.filter(function(d) {
-    return d.date >= cutoffDate;
-  });
+    data[person].forEach(function(d) {
+
+      d.Date = parseTime(d.Date);
+
+      // define cumulative and non cumulative lines for players
+      cumulativeLines[person] = d3.line()
+        .x(function(d) { return graphX(d.Date); })
+        .y(function(d) { return graphY(d.DurationCumulative); });
+
+      nonCumulativeLines[person] = d3.line()
+        .x(function(d) { return graphX(d.Date); })
+        .y(function(d) { return graphY(d.DurationNonCumulative); });   
+
+
+    });
+  }
+
+  // scale the domain of the data, same for every player
+  graphX.domain(d3.extent(data[Object.keys(data)[0]], function(d) { 
+    return d.Date; 
+  }));
+
+  // scale the range of data, 
+  graphY.domain([0, d3.max(Object.values(data), function(d) {
+    var globalMax = 0;
+    for (person in d) {
+      var localMax = Math.max(d[person].DurationCumulative);
+      if (localMax > globalMax) { globalMax = localMax };     
+    }
+    return globalMax;
+  })]);
 
   // add the X Axis
   svg.append("g")
@@ -106,194 +95,104 @@ d3.csv(graphDataJSON).then(function(data) {
       .call(d3.axisLeft(graphY))
       .attr("class", "y_axis");
 
-  // add goal line
-  var avgGoalLine = svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke-dasharray", ("3, 3"))
-    .attr("d", cumulativeAvgGoalLine);
+  // add the cumulative lines and legend
+  var legendBaseline = 335;
+  var i = 0;
+  for (var person in cumulativeLines) {
+    
+    // add cumulative line
+    svgLines[person] = svg.append("path")
+      .datum(data[person])
+      .attr("class", "line")
+      .style("stroke", colorList[i])
+      .attr("d", cumulativeLines[person]);
 
-  // legend
-  svg.append("circle")
-    .attr("cx",475)
-    .attr("cy",320)
-    .attr("r", 4)
-    .style("fill", "crimson")
-  svg.append("circle")
-    .attr("cx",475)
-    .attr("cy",335)
-    .attr("r", 4)
-    .style("fill", "mediumseagreen")
-  svg.append("text")
-    .attr("x", 482)
-    .attr("y", 320)
-    .text("Faboo")
-    .style("font-size", "13px")
-    .attr("alignment-baseline","middle")
-  svg.append("text")
-    .attr("x", 482)
-    .attr("y", 335)
-    .text("Daddy")
-    .style("font-size", "13px")
-    .attr("alignment-baseline","middle")
+    // legend
+    svg.append("circle")
+      .attr("cx", 475)
+      .attr("cy", legendBaseline - i*15)
+      .attr("r", 4)
+      .style("fill", colorList[i])
+    svg.append("text")
+      .attr("x", 482)
+      .attr("y", legendBaseline - i*15)
+      .text(person)
+      .style("font-size", "13px")
+      .attr("alignment-baseline","middle");
 
+      // add person head
 
-  // add custom goal for fabian
-  var fabooGoalLine = svg.append("path")
-    .data([predictedData])
-    .attr("class", "line")
-    .style("stroke-dasharray", ("3, 3"))
-    .style("stroke", "crimson")
-    .attr("d", cumulativeCustomGoalLineFaboo);
-
-  // add custom goal line for daddy
-  var daddyGoalLine = svg.append("path")
-    .data([predictedData])
-    .attr("class", "line")
-    .style("stroke-dasharray", ("3, 3"))
-    .style("stroke", "mediumseagreen")
-    .attr("d", cumulativeCustomGoalLineDaddy);
-
-  // add the faboo path and dots
-  var fabooLine = svg.append("path")
-    .data([actualData])
-    .attr("class", "line")
-    .style("stroke", "crimson")
-    .attr("d", cumulativeLineFaboo);
-
-  var fabooDots = svg.append("g")
-    .selectAll("dot")
-    .data(actualData)
-    .enter()
-    .append("circle")
-    .attr("class", "data_point")
-    .attr("cx", function(d) { return graphX(d.date); } )
-    .attr("cy", function(d) { return graphY(d.faboo_cumulative); } )
-    .attr("r", 2)
-    .attr("stroke", "crimson")
-    .attr("stroke-width", 1)
-    .attr("fill", "crimson")
+    i++;
+  }
 
   // add faboo head
-  var fabooHead = svg.append('image')
-    .attr('xlink:href', fabooHeadPNG)
-    .attr('width', 20)
-    .attr('height', 20)
-    .attr("x", function() { return graphX(actualData[actualData.length - 1].date) - 10 } )
-    .attr("y", function() { return graphY(actualData[actualData.length - 1].faboo_cumulative) - 10 } )
-
-  // add the daddy path and dots
-  var daddyLine = svg.append("path")
-    .data([actualData])
-    .attr("class", "line")
-    .style("stroke", "mediumseagreen")
-    .attr("d", cumulativeLineDaddy);
-
-  var daddyDots = svg.append("g")
-    .selectAll("dot")
-    .data(actualData)
-    .enter()
-    .append("circle")
-    .attr("class", "data_point")
-    .attr("cx", function(d) { return graphX(d.date); } )
-    .attr("cy", function(d) { return graphY(d.daddy_cumulative); } )
-    .attr("r", 2)
-    .attr("stroke", "mediumseagreen")
-    .attr("stroke-width", 1)
-    .attr("fill", "mediumseagreen")
-
-  // add daddy head
-  var daddyHead = svg.append('image')
-    .attr('xlink:href', daddyHeadPNG)
-    .attr('width', 20)
-    .attr('height', 20)
-    .attr("x", function() { return graphX(actualData[actualData.length - 1].date) - 10 } )
-    .attr("y", function() { return graphY(actualData[actualData.length - 1].daddy_cumulative) - 10 } )
+  // var fabooHead = svg.append('image')
+  //   .attr('xlink:href', fabooHeadPNG)
+  //   .attr('width', 20)
+  //   .attr('height', 20)
+  //   .attr("x", function() { return graphX(actualData[actualData.length - 1].date) - 10 } )
+  //   .attr("y", function() { return graphY(actualData[actualData.length - 1].faboo_cumulative) - 10 } )
 
 
   // update the chart to show the data for the selected group
-  function toggleGraph(selectedVariableText, selectedColumnText) {
+  function toggleGraph(isCumulative) {
 
-    var padding = (selectedColumnText == "cumulative") ? 0 : 10000;
-
-    graphY.domain([0, d3.max(data, function(d) {
-        return Math.max(
-          eval("d.faboo_" + selectedColumnText), 
-          eval("d.daddy_" + selectedColumnText), 
-          eval("d.avg_goal_" + selectedColumnText)
-        ) + padding; 
-      })
-    ]);
+    // scale the range of data, 
+    graphY.domain([0, d3.max(Object.values(data), function(d) {
+      var globalMax = 0;
+      for (person in d) {
+        var localMax = 0;
+        if (isCumulative) {
+          localMax = Math.max(d[person].DurationCumulative);
+        }
+        else {
+          localMax = Math.max(d[person].DurationNonCumulative);
+        }
+        if (localMax > globalMax) { globalMax = localMax };     
+      }
+      return globalMax;
+    })]);
 
     svg.select(".y_axis")
       .transition()
       .duration(1000)
       .call(d3.axisLeft(graphY))
 
+    // update the lines
+    var i = 0;
+    lines = {};
+    if (isCumulative) {
+      lines = cumulativeLines;
+    }
+    else {
+      lines = nonCumulativeLines;
+    }
+    for (var person in lines) {
+      svgLines[person]
+        .transition()
+        .duration(1000)
+        .attr("d", lines[person]);
+      i++;
+    }
 
-    // Give these new data to update line
-    avgGoalLine
-      .transition()
-      .duration(1000)
-      .attr("d", eval(selectedVariableText + "AvgGoalLine"));
+  //   fabooDots
+  //     .transition()
+  //     .duration(1000)
+  //     .attr("cx", function(d) { return graphX(d.date); } )
+  //     .attr("cy", function(d) { 
+  //       return graphY(
+  //         eval("d.faboo_" + selectedColumnText)
+  //       ); 
+  //     });
 
-    fabooGoalLine
-      .transition()
-      .duration(1000)
-      .attr("d", eval(selectedVariableText + "CustomGoalLineFaboo"));
-
-    daddyGoalLine
-      .transition()
-      .duration(1000)
-      .attr("d", eval(selectedVariableText + "CustomGoalLineDaddy"));
-
-    fabooLine
-      .transition()
-      .duration(1000)
-      .attr("d", eval(selectedVariableText + "LineFaboo"));
-
-    fabooDots
-      .transition()
-      .duration(1000)
-      .attr("cx", function(d) { return graphX(d.date); } )
-      .attr("cy", function(d) { 
-        return graphY(
-          eval("d.faboo_" + selectedColumnText)
-        ); 
-      });
-
-    fabooHead
-      .transition()
-      .duration(1000)
-      .attr("y", function() {
-        return graphY(
-          eval( "actualData[actualData.length - 1].faboo_" + selectedColumnText )
-        ) - 10
-      });
-
-    daddyLine
-      .transition()
-      .duration(1000)
-      .attr("d", eval(selectedVariableText + "LineDaddy"));
-
-    daddyDots
-      .transition()
-      .duration(1000)
-      .attr("cx", function(d) { return graphX(d.date); } )
-      .attr("cy", function(d) { 
-        return graphY(
-          eval("d.daddy_" + selectedColumnText)
-        ); 
-      });
-
-    daddyHead
-      .transition()
-      .duration(1000)
-      .attr("y", function() {
-        return graphY(
-          eval( "actualData[actualData.length - 1].daddy_" + selectedColumnText )
-        ) - 10
-      });
+  //   fabooHead
+  //     .transition()
+  //     .duration(1000)
+  //     .attr("y", function() {
+  //       return graphY(
+  //         eval( "actualData[actualData.length - 1].faboo_" + selectedColumnText )
+  //       ) - 10
+  //     });
 
   }
 
@@ -301,17 +200,15 @@ d3.csv(graphDataJSON).then(function(data) {
   d3.select("#cumulative_button").on("click", function() {
     $("#non_cumulative_button").removeClass("active");
     $("#cumulative_button").addClass("active");
-    toggleGraph("cumulative", "cumulative");
+    toggleGraph(true);
   });
   d3.select("#non_cumulative_button").on("click", function() {
     $("#cumulative_button").removeClass("active");
     $("#non_cumulative_button").addClass("active");
-    toggleGraph("nonCumulative", "non_cumulative");
+    toggleGraph(false);
   });
 
 });
-
-
 
 
 // build table

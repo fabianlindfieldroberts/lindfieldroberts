@@ -56,7 +56,14 @@
 				{% endif %}
 				id="graph_container"
 			>
-				<div id="graph">Graph coming soon...</div>
+				<div id="graph"></div>
+				<div id="buttons">
+					<button type="button" id="cumulative_button" class="active">
+						Cumulative
+					</button><button type="button" id="non_cumulative_button">
+						Meters/Day
+					</button>
+				</div>
 			</div>
 			<div class="hidden_on_load" id="stats_container">
 				<div id="game_stats"></div>
@@ -71,6 +78,7 @@
 				id="submit_container"
 			>
 				<div id="error">
+					<!-- If there are errors on form -->
 					{% if form.errors %}
 					    {% for field in form %}
 					        {% for error in field.errors %}
@@ -81,13 +89,34 @@
 					        {{ error|escape }}<br>
 					    {% endfor %}
 					{% endif %}
+					
+					<!-- If game has expired -->
+					{% if gameOver %}
+						This game has ended
+					{% endif %}
 				</div>
 				<form action="{{ action }}" method="post">
 					{% csrf_token %}
-					<input class="text_input" type="text" placeholder="Enter Name" name="userName" maxlength="50" required><br>
-					<input class="text_input" type="password" placeholder="Enter Password" name="password" maxlength="50" required><br>
-					<input class="text_input" type="text" placeholder="Comment (Optional)" name="comment" maxlength="50"><br>
-					<select name="duration" id="duration">
+					<input class="text_input" type="text" placeholder="Enter Name" name="userName" maxlength="50" required 
+					{% if gameOver %}
+						disabled
+					{% endif %}
+					><br>
+					<input class="text_input" type="password" placeholder="Enter Password" name="password" maxlength="50" required
+					{% if gameOver %}
+						disabled
+					{% endif %}
+					><br>
+					<input class="text_input" type="text" placeholder="Comment (Optional)" name="comment" maxlength="50"
+					{% if gameOver %}
+						disabled
+					{% endif %}
+					><br>
+					<select name="duration" id="duration"
+					{% if gameOver %}
+						disabled
+					{% endif %}
+					>
 						<option value="5">5</option>
 						<option value="10">10</option>
 						<option value="15">15</option>
@@ -103,8 +132,16 @@
 						<option value="90">90</option>
 						<option value="120">120</option>
 					</select><br>
-					<input id="attestation" name="attestation" type="checkbox"> <label for="attestation">{{attestation}}</label><br>
-					<input id="form_submit_button" value="Submit" type="submit">
+					<input id="attestation" name="attestation" type="checkbox"
+					{% if gameOver %}
+						disabled
+					{% endif %}
+					> <label for="attestation">{{attestation}}</label><br>
+					<input id="form_submit_button" value="Submit" type="submit"
+					{% if gameOver %}
+						disabled
+					{% endif %}
+					>
 				</form>
 			</div>
 		</div>

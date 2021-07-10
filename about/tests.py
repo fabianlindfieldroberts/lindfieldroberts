@@ -5,7 +5,7 @@ from django.test import Client
 from .constants import LEADER_BOARD_LENGTH
 
 # High score model and form
-from .models import HighScore
+from .models import HighScore, Stat, Day, Game
 from .forms import HighScoreForm
 
 # Tests related to the High Score form
@@ -211,5 +211,25 @@ class IndexViewTests(TestCase):
 	"""
 
 
+# Tests related to the Day model
+class DayDataTests(TestCase):
+	"""
+	Check the day data is all calculated correctly
+	"""
+	# games = Game.objects.all().order_by('dateCreated')
+	# days = Day.objects.filter(user__username='mummy').order_by('date', 'user__username')
+	# for day in days:
+	# 	message = str(day.pk) + " " + str(day.date) + "(" + str(day.user.username) + "): " + " "
+	# 	stats = Stat.objects.filter(user__username='mummy', day=day).order_by('dateCreated')
+	# 	statSum = 0
+	# 	for i, stat in enumerate(stats, start=1):
+	# 		if i != 1:
+	# 			message += "+"
+	# 		message += str(stat.duration)
+	# 		statSum += stat.duration
+
+
+	# 	message += "=" + str(statSum) + "=" + str(day.durationNonCumulative) + " " + str(day.durationCumulative)
+	# 	print(message)
 
 

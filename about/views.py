@@ -205,7 +205,8 @@ def dashboard(request, gameName):
 			'action': '/' + game.name + '/',
 			'attestation': "Not a luder, just a lumpi",
 			'rules': game.rules,
-			'form': form
+			'form': form,
+			'gameOver': datetime.datetime.now(timezone.utc) > game.endDate
 		}
 		return HttpResponse(template.render(context, request))
 
@@ -224,7 +225,8 @@ def minutes_by_day(request, gameName):
 				.annotate(Date=F('date')) \
 				.annotate(DurationNonCumulative=F('durationNonCumulative')) \
 				.annotate(DurationCumulative=F('durationCumulative')) \
-				.values('Date', 'DurationNonCumulative', 'DurationCumulative')
+				.values('Date', 'DurationNonCumulative', 'DurationCumulative') \
+				.order_by('Date')
 			data[user.username] = list(day)
 	return JsonResponse(data, safe=False)
 
@@ -235,8 +237,9 @@ def game_stats(request, gameName):
 	else:
 		game = gameQuerySet[0]	
 		today = datetime.datetime.now(timezone.utc)
-		elapsedDelta = today - game.startDate
-		remainingDelta = game.endDate - today
+		gameOver = today > game.endDate
+		elapsedDelta = game.endDate - game.startDate if gameOver else today - game.startDate
+		remainingDelta = game.endDate - game.endDate if gameOver else game.endDate - today
 		daysElapsed = elapsedDelta.days
 		daysRemaining = remainingDelta.days
 		data = [{
